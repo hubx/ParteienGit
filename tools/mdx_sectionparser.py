@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from collections import Counter
+import codecs
 
 from markdown.util import etree
 import markdown
@@ -7,12 +8,15 @@ import markdown
 class SectionProcessor(markdown.treeprocessors.Treeprocessor):
   def __init__ (self, args):
     self.args = args
+    f = codecs.open('german.stopwords', 'r', "utf8")
+    self.STOPWORDS = map(lambda line: line.strip(), f.readlines())
 
   def statistic(self, lst):
     section = ""
     for text in lst.itertext():
       section += text
-    count = Counter(section.split()).most_common(3)
+    words = filter(lambda x: x not in self.STOPWORDS, section.split())
+    count = Counter(words).most_common(3)
     return u"Häufige Wörter: " + ', '.join("'"+i+"':"+str(j) for i,j in count)
 
   def run(self, root):
