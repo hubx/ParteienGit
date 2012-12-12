@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 from collections import Counter
 import codecs
+import re
+import string
 
 from markdown.util import etree
 import markdown
@@ -15,7 +17,8 @@ class SectionProcessor(markdown.treeprocessors.Treeprocessor):
     section = ""
     for text in lst.itertext():
       section += text
-    words = filter(lambda x: x.lower() not in self.STOPWORDS, section.split())
+    regex = re.compile('[%s]' % re.escape(string.punctuation))
+    words = filter(lambda x: regex.sub('', x.lower()) not in self.STOPWORDS, section.split())
     count = Counter(words).most_common(3)
     return u"Häufige Wörter: " + ', '.join("'"+i+"':"+str(j) for i,j in count)
 
