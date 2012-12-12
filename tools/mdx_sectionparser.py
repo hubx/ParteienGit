@@ -15,7 +15,7 @@ class SectionProcessor(markdown.treeprocessors.Treeprocessor):
     section = ""
     for text in lst.itertext():
       section += text
-    words = filter(lambda x: x not in self.STOPWORDS, section.split())
+    words = filter(lambda x: x.lower() not in self.STOPWORDS, section.split())
     count = Counter(words).most_common(3)
     return u"Häufige Wörter: " + ', '.join("'"+i+"':"+str(j) for i,j in count)
 
