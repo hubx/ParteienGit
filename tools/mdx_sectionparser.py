@@ -29,11 +29,6 @@ class SectionProcessor(markdown.treeprocessors.Treeprocessor):
         if child.tag < lasttag:
           prev.tail = self.statistic(section_stack) 
           section_stack = etree.Element("section")
-          #neue ueberschrift print summary, add before
-        if child.tag == lasttag:
-          #neue benachbartes topic
-          #eventuell auch einfuegen bei grossssen benachbarten sectionen
-          pass
         lasttag = child.tag
       else:
         section_stack.append(child)
